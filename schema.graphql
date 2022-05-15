@@ -24,7 +24,7 @@ type Link {
   id: Int!
   postedBy: User
   url: String!
-  voters: User
+  voters: [User!]!
 }
 
 input LinkOrderByInput {
@@ -36,28 +36,12 @@ input LinkOrderByInput {
 type Mutation {
   post(description: String!, url: String!): Link!
   signin(email: String!, password: String!): AuthPayload
-  signup(email: String!, name: String!, password: String!): AuthPayload!
+  signup(email: String!, name: String!, password: String!): AuthPayload
   vote(linkId: Int!): Vote!
-}
-
-enum OsName {
-  android
-  ios
-  linux
-  windows
-}
-
-type Phone {
-  id: ID
-  manufacturer: String!
-  osName: OsName!
-  osVersion: String!
 }
 
 type Query {
   feed(filter: String, orderBy: [LinkOrderByInput!], skip: Int, take: Int): Feed!
-  phones: [Phone]
-  user: [User]!
 }
 
 enum Sort {
@@ -67,7 +51,7 @@ enum Sort {
 
 type User {
   email: String!
-  id: ID!
+  id: Int!
   links: [Link!]!
   name: String!
   password: String!

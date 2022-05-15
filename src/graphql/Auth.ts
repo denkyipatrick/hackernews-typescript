@@ -22,9 +22,10 @@ export const LoginMutation = extendType({
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
       },
-      async resolve(parent, args, context) {
+      async resolve(_parent, args, context, _info) {
+        const { email } = args;
         const user = await context.prisma.user.findUnique({
-          where: { email: args.email },
+          where: { email },
         });
 
         if (!user) {
@@ -39,7 +40,7 @@ export const LoginMutation = extendType({
 
         const token = jwt.sign({ userId: user?.id }, APP_SECRET);
 
-        return { user, token };
+        return { token, user };
       },
     });
   },
@@ -48,16 +49,15 @@ export const LoginMutation = extendType({
 export const SignUpMutation = extendType({
   type: "Mutation",
   definition(t) {
-    t.nonNull.field("signup", {
+    t.field("signup", {
       type: "AuthPayload",
       args: {
         email: nonNull(stringArg()),
         password: nonNull(stringArg()),
         name: nonNull(stringArg()),
       },
-      async resolve(parent, args, context) {
+      async resolve(_parent, args, context, _info) {
         const { email, name } = args;
-
         const password = await bcryptjs.hash(args.password, 10);
 
         const user = await context.prisma.user.create({

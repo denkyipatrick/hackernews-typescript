@@ -37,7 +37,6 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
-  OsName: "android" | "ios" | "linux" | "windows"
   Sort: "asc" | "desc"
 }
 
@@ -67,16 +66,10 @@ export interface NexusGenObjects {
     url: string; // String!
   }
   Mutation: {};
-  Phone: { // root type
-    id?: string | null; // ID
-    manufacturer: string; // String!
-    osName: NexusGenEnums['OsName']; // OsName!
-    osVersion: string; // String!
-  }
   Query: {};
   User: { // root type
     email: string; // String!
-    id: string; // ID!
+    id: number; // Int!
     name: string; // String!
     password: string; // String!
   }
@@ -112,28 +105,20 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string; // String!
-    voters: NexusGenRootTypes['User'] | null; // User
+    voters: NexusGenRootTypes['User'][]; // [User!]!
   }
   Mutation: { // field return type
     post: NexusGenRootTypes['Link']; // Link!
     signin: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
-    signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
+    signup: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     vote: NexusGenRootTypes['Vote']; // Vote!
-  }
-  Phone: { // field return type
-    id: string | null; // ID
-    manufacturer: string; // String!
-    osName: NexusGenEnums['OsName']; // OsName!
-    osVersion: string; // String!
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Feed']; // Feed!
-    phones: Array<NexusGenRootTypes['Phone'] | null> | null; // [Phone]
-    user: Array<NexusGenRootTypes['User'] | null>; // [User]!
   }
   User: { // field return type
     email: string; // String!
-    id: string; // ID!
+    id: number; // Int!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
     password: string; // String!
@@ -169,20 +154,12 @@ export interface NexusGenFieldTypeNames {
     signup: 'AuthPayload'
     vote: 'Vote'
   }
-  Phone: { // field return type name
-    id: 'ID'
-    manufacturer: 'String'
-    osName: 'OsName'
-    osVersion: 'String'
-  }
   Query: { // field return type name
     feed: 'Feed'
-    phones: 'Phone'
-    user: 'User'
   }
   User: { // field return type name
     email: 'String'
-    id: 'ID'
+    id: 'Int'
     links: 'Link'
     name: 'String'
     password: 'String'

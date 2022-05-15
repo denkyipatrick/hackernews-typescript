@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
 
 export const Vote = objectType({
@@ -16,15 +17,15 @@ export const VoteMutation = extendType({
       args: {
         linkId: nonNull(intArg()),
       },
-      async resolve(parent, args, context) {
-        const { userId, prisma } = context;
+      async resolve(_parent, args, context) {
+        const { userId } = context;
         const { linkId } = args;
 
         if (!userId) {
           throw new Error("Unauthorized. Please login first.");
         }
 
-        const link = await prisma.link.update({
+        const link = await context.prisma.link.update({
           where: { id: linkId },
           data: {
             voters: {
@@ -33,11 +34,13 @@ export const VoteMutation = extendType({
           },
         });
 
-        const user = await prisma.user.findUnique({ where: { id: userId } });
+        const user = await context.prisma.user.findUnique({
+          where: { id: userId },
+        });
 
         return {
           link,
-          user,
+          user: user as User,
         };
       },
     });
